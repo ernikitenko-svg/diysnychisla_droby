@@ -493,7 +493,8 @@
                     <li><strong>Рівень складності:</strong> легко</li>
                 </ul>
             </div>
-
+<input type="text" id="student-name" placeholder="Введіть ваше ім'я та прізвище" style="width: 100%; max-width: 280px; padding: 12px; margin-bottom: 12px; border-radius: 10px; border: 2px solid #E2E8F0; font-size: 1rem; text-align: center; outline: none;">
+<br>
             <button id="start-btn" class="btn-primary" style="margin-top: 10px; width: 100%; max-width: 280px;">Розпочати тест</button>
         </div>
 
@@ -627,6 +628,28 @@
         const finalScore = document.getElementById('final-score');
         const resultsMessage = document.getElementById('results-message');
 
+// Google Apps Script URL
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbzfiBOOCv65pCpLMYX7be0wKGrpoDNWkxdpf7-osZbdbnHT788nZPT918hKZ3IZsdvy/exec';
+
+        function sendResultsToGoogleSheet(studentName, testScore) {
+            if (!scriptURL || scriptURL.includes('https://script.google.com/macros/s/AKfycbzfiBOOCv65pCpLMYX7be0wKGrpoDNWkxdpf7-osZbdbnHT788nZPT918hKZ3IZsdvy/exec')) return;
+
+            const dataToSend = {
+                name: studentName,
+                score: testScore + "/10"
+            };
+
+            fetch(scriptURL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToSend)
+            })
+            .catch(error => console.error('Помилка відправки:', error));
+        }
+        
         // Timer Control
         function startTimer() {
             totalSeconds = 600; // Reset to 10 min
@@ -748,6 +771,10 @@
 
             finalScore.textContent = `${score}/10`;
 
+// Отримуємо ім'я та відправляємо в Google Таблицю
+            const studentName = document.getElementById('student-name').value.trim() || "Анонім";
+            sendResultsToGoogleSheet(studentName, score);
+            
             if (score >= 9) {
                 resultsMessage.textContent = "Чудовий результат!";
             } else if (score >= 7) {
