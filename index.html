@@ -632,7 +632,7 @@
         const scriptURL = 'https://script.google.com/macros/s/AKfycbzfiBOOCv65pCpLMYX7be0wKGrpoDNWkxdpf7-osZbdbnHT788nZPT918hKZ3IZsdvy/exec';
 
         function sendResultsToGoogleSheet(studentName, testScore) {
-            if (!scriptURL || scriptURL.includes('https://script.google.com/macros/s/AKfycbzfiBOOCv65pCpLMYX7be0wKGrpoDNWkxdpf7-osZbdbnHT788nZPT918hKZ3IZsdvy/exec')) return;
+            if (!scriptURL) return;
 
             const dataToSend = {
                 name: studentName,
